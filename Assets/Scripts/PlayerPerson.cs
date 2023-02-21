@@ -10,6 +10,9 @@ public class PlayerPerson : MonoBehaviour
 
     [SerializeField] private GameObject model;
 
+    [SerializeField] private Animator animator;
+    private static readonly int IsRun = Animator.StringToHash("isRun");
+
     private void Start()
     {
         _camera = Camera.main;
@@ -26,21 +29,32 @@ public class PlayerPerson : MonoBehaviour
             {
                 Vector3 clickPoint = hit.point;
                 
-                Vector3 direction = (clickPoint - transform.position).normalized;
-
-                Quaternion  lookRotation = Quaternion.LookRotation(direction);
-                lookRotation.x = 0;
-                lookRotation.z = 0;
- 
-                model.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1);
+                RotateToTarget(clickPoint);
             
                 gun.Fire(clickPoint);
             }
+        }
+
+        if (agent.hasPath == false)
+        {
+            animator.SetBool(IsRun, false);
         }
     }
 
     public void Move(Vector3 target)
     {
+        animator.SetBool(IsRun, true);
         agent.destination = target;
+    }
+
+    private void RotateToTarget(Vector3 target)
+    {
+        Vector3 direction = (target - transform.position).normalized;
+
+        Quaternion  lookRotation = Quaternion.LookRotation(direction);
+        lookRotation.x = 0;
+        lookRotation.z = 0;
+ 
+        model.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1);
     }
 }
