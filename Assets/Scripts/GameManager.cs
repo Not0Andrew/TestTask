@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    private void Start()
+    public void Begin()
     {
         LevelProgress.Instance.NextPoint();
     }

@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelProgress : MonoBehaviour
 {
@@ -24,5 +26,17 @@ public class LevelProgress : MonoBehaviour
             person.Move(points[_levelPointId].transform.position);
             points[_levelPointId].Activate();
         }
+
+        if (_levelPointId == points.Count - 1)
+        {
+            StartCoroutine(Finish());
+        }
+    }
+
+    private IEnumerator Finish()
+    {
+        yield return new WaitForSeconds(3f);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
